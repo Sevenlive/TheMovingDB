@@ -2,7 +2,8 @@
 
 This document provides detailed instructions for running TheMovingDB using Docker.
 
-For testing and verification, see [DOCKER_TESTING.md](DOCKER_TESTING.md).
+- For testing and verification, see [DOCKER_TESTING.md](DOCKER_TESTING.md)
+- For quick command reference, see [DOCKER_QUICKREF.md](DOCKER_QUICKREF.md)
 
 ## Prerequisites
 
