@@ -24,7 +24,25 @@ A full-stack moving inventory management application built with Bun.js (backend)
 
 ## Installation
 
-### Backend Setup
+### Quick Start (Recommended)
+
+Install all dependencies at once:
+```bash
+npm run install:all
+```
+
+Then run both backend and frontend together:
+```bash
+npm run dev
+```
+
+This will start:
+- Backend on `http://localhost:3000`
+- Frontend on `http://localhost:5173`
+
+### Manual Setup
+
+#### Backend Setup
 
 1. Navigate to the backend directory:
    ```bash
@@ -43,7 +61,7 @@ A full-stack moving inventory management application built with Bun.js (backend)
 
    The backend will start on `http://localhost:3000` and create a SQLite database (`moving.db`) automatically.
 
-### Frontend Setup
+#### Frontend Setup
 
 1. Navigate to the frontend directory:
    ```bash
