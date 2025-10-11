@@ -1,0 +1,14 @@
+.git
+.gitignore
+.env
+.env.local
+*.md
+.vscode
+.idea
+*.log
+node_modules
+dist
+build
+*.db
+*.db-shm
+*.db-wal

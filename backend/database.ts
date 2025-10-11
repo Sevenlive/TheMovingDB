@@ -1,7 +1,14 @@
 import { Database } from 'bun:sqlite';
 import { join } from 'path';
+import { mkdirSync, existsSync } from 'fs';
 
-const db = new Database(join(import.meta.dir, 'moving.db'));
+// Create data directory if it doesn't exist
+const dataDir = join(import.meta.dir, 'data');
+if (!existsSync(dataDir)) {
+  mkdirSync(dataDir, { recursive: true });
+}
+
+const db = new Database(join(dataDir, 'moving.db'));
 
 // Initialize database schema
 db.exec(`
