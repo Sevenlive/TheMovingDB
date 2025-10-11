@@ -1,1 +1,145 @@
 # TheMovingDB
+
+A full-stack moving inventory management application built with Bun.js (backend) and React (frontend). Track your items, boxes, and their locations during your move with an intuitive interface.
+
+## Features
+
+- **Dashboard**: View statistics about your total boxes and items, organized by location
+- **Box Management**: Create, edit, delete, and track boxes with labels, numbers, and locations
+- **Item Management**: Add items with descriptions, categories, and conditions
+- **Smart Organization**: Assign items to boxes and track which box is where
+- **Search & Filter**: Quickly find boxes or items by search or filter by location
+- **Location Tracking**: Track items across old home, new home, and storage
+
+## Tech Stack
+
+- **Backend**: Bun.js with built-in SQLite database
+- **Frontend**: React with TypeScript and Vite
+- **Styling**: Modern CSS with responsive design
+
+## Prerequisites
+
+- [Bun](https://bun.sh) - Fast JavaScript runtime (for backend)
+- [Node.js](https://nodejs.org) - For frontend development
+
+## Installation
+
+### Backend Setup
+
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+
+2. Install dependencies (Bun will handle this automatically):
+   ```bash
+   bun install
+   ```
+
+3. Start the backend server:
+   ```bash
+   bun run index.ts
+   ```
+
+   The backend will start on `http://localhost:3000` and create a SQLite database (`moving.db`) automatically.
+
+### Frontend Setup
+
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+   The frontend will start on `http://localhost:5173`
+
+## Usage
+
+1. Start both backend and frontend servers
+2. Open your browser to `http://localhost:5173`
+3. Use the navigation tabs to switch between Dashboard, Boxes, and Items
+4. Add boxes with labels, numbers, and locations
+5. Add items and assign them to boxes
+6. Use search and filters to find specific boxes or items
+7. View the dashboard for overall statistics
+
+## API Endpoints
+
+### Boxes
+- `GET /api/boxes` - Get all boxes (supports search and location filters)
+- `POST /api/boxes` - Create a new box
+- `GET /api/boxes/:id` - Get a specific box
+- `PUT /api/boxes/:id` - Update a box
+- `DELETE /api/boxes/:id` - Delete a box
+- `GET /api/boxes/:id/items` - Get all items in a box
+
+### Items
+- `GET /api/items` - Get all items (supports search, box_id, and category filters)
+- `POST /api/items` - Create a new item
+- `GET /api/items/:id` - Get a specific item
+- `PUT /api/items/:id` - Update an item
+- `DELETE /api/items/:id` - Delete an item
+
+### Dashboard
+- `GET /api/dashboard` - Get dashboard statistics
+
+## Database Schema
+
+### Boxes Table
+- `id` - Primary key
+- `label` - Box label/description
+- `number` - Unique box number
+- `room` - Room or area name
+- `location` - Current location (old_home, new_home, storage)
+- `created_at` - Timestamp
+- `updated_at` - Timestamp
+
+### Items Table
+- `id` - Primary key
+- `name` - Item name
+- `description` - Optional description
+- `category` - Optional category
+- `condition` - Item condition
+- `box_id` - Foreign key to boxes (nullable)
+- `created_at` - Timestamp
+- `updated_at` - Timestamp
+
+## Development
+
+### Backend
+The backend uses Bun's built-in web server and SQLite database. The server automatically initializes the database schema on startup.
+
+### Frontend
+The frontend is built with React and TypeScript using Vite for fast development. It uses a component-based architecture with dedicated components for forms, lists, and the dashboard.
+
+## Project Structure
+
+```
+TheMovingDB/
+├── backend/
+│   ├── index.ts          # Main server file
+│   ├── database.ts       # Database setup and schema
+│   ├── types.ts          # TypeScript type definitions
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/   # React components
+│   │   ├── App.tsx       # Main app component
+│   │   ├── api.ts        # API service layer
+│   │   └── types.ts      # TypeScript types
+│   └── package.json
+└── README.md
+```
+
+## License
+
+MIT
