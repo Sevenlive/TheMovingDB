@@ -30,6 +30,24 @@ A full-stack moving inventory management application built with Bun.js (backend)
 
 ### Docker Deployment (Recommended)
 
+For the easiest setup with Docker, see the [Docker Deployment Guide](DOCKER.md) for detailed instructions.
+
+**Quick start:**
+
+```bash
+# Development mode with hot reload
+docker compose up
+
+# Production mode
+docker compose -f docker-compose.prod.yml up -d
+```
+
+Or use the setup script:
+
+```bash
+./docker-setup.sh
+```
+
 #### Development Mode (with hot reload)
 
 Run the application in development mode with auto-reload:
@@ -198,6 +216,8 @@ TheMovingDB/
 │   ├── index.ts          # Main server file
 │   ├── database.ts       # Database setup and schema
 │   ├── types.ts          # TypeScript type definitions
+│   ├── Dockerfile        # Production Docker image
+│   ├── Dockerfile.dev    # Development Docker image with hot reload
 │   └── package.json
 ├── frontend/
 │   ├── src/
@@ -205,7 +225,14 @@ TheMovingDB/
 │   │   ├── App.tsx       # Main app component
 │   │   ├── api.ts        # API service layer
 │   │   └── types.ts      # TypeScript types
+│   ├── nginx.conf        # Nginx configuration for production
+│   ├── Dockerfile        # Production Docker image
+│   ├── Dockerfile.dev    # Development Docker image with HMR
 │   └── package.json
+├── docker-compose.yml         # Development compose file
+├── docker-compose.prod.yml    # Production compose file
+├── docker-setup.sh            # Interactive setup script
+├── DOCKER.md                  # Docker deployment guide
 └── README.md
 ```
 
