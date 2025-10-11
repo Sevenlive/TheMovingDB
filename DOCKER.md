@@ -2,6 +2,8 @@
 
 This document provides detailed instructions for running TheMovingDB using Docker.
 
+For testing and verification, see [DOCKER_TESTING.md](DOCKER_TESTING.md).
+
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) (version 20.10 or later)
@@ -231,17 +233,83 @@ docker compose exec backend bun run -e "import db from './database.ts'; console.
 
 ### Development Stack
 
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      Docker Compose (Dev)                   │
+├─────────────────────────────────────────────────────────────┤
+│                                                               │
+│  ┌──────────────────────┐      ┌──────────────────────┐    │
+│  │   Backend Container  │      │  Frontend Container  │    │
+│  │  themovingdb-backend │      │ themovingdb-frontend │    │
+│  │                      │      │                      │    │
+│  │  Bun 1.1.38 Alpine   │      │  Node 20 Alpine      │    │
+│  │  Port: 3000          │◄─────┤  Port: 5173          │    │
+│  │  CMD: bun --watch    │      │  CMD: vite --host    │    │
+│  │                      │      │                      │    │
+│  │  Volumes:            │      │  Volumes:            │    │
+│  │  - ./backend → /app  │      │  - ./frontend → /app │    │
+│  │  - backend-data      │      │  - (node_modules)    │    │
+│  └──────────────────────┘      └──────────────────────┘    │
+│           │                              │                   │
+│           │                              │                   │
+│           └──────────────┬───────────────┘                   │
+│                          │                                   │
+│                    ┌─────▼──────┐                           │
+│                    │  Volume:   │                           │
+│                    │ backend-   │                           │
+│                    │   data     │                           │
+│                    │ (SQLite DB)│                           │
+│                    └────────────┘                           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Features:**
 - **Backend**: Bun 1.1.38 (Alpine Linux) with watch mode
 - **Frontend**: Node 20 (Alpine Linux) with Vite dev server
-- **Volumes**: Source code mounted for hot reload
+- **Hot Reload**: Source code mounted as volumes
+- **Port 3000**: Backend API
+- **Port 5173**: Frontend with HMR
 
 ### Production Stack
 
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Docker Compose (Prod)                    │
+├─────────────────────────────────────────────────────────────┤
+│                                                               │
+│  ┌──────────────────────┐      ┌──────────────────────┐    │
+│  │   Backend Container  │      │  Frontend Container  │    │
+│  │  themovingdb-backend │      │ themovingdb-frontend │    │
+│  │                      │      │                      │    │
+│  │  Bun 1.1.38 Alpine   │      │  Nginx Alpine        │    │
+│  │  Port: 3000          │◄─────┤  Port: 80            │    │
+│  │  CMD: bun index.ts   │      │  Serving: /dist      │    │
+│  │  Health Check ✓      │      │  Health Check ✓      │    │
+│  │                      │      │  Gzip: ON            │    │
+│  │  Volume:             │      │  Cache: Enabled      │    │
+│  │  - backend-data      │      │                      │    │
+│  └──────────────────────┘      └──────────────────────┘    │
+│           │                                                  │
+│           │                                                  │
+│           └──────────────┬                                   │
+│                          │                                   │
+│                    ┌─────▼──────┐                           │
+│                    │  Volume:   │                           │
+│                    │ backend-   │                           │
+│                    │   data     │                           │
+│                    │ (SQLite DB)│                           │
+│                    └────────────┘                           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Features:**
 - **Backend**: Bun 1.1.38 (Alpine Linux) optimized build
 - **Frontend**: 
   - Build stage: Node 20 (Alpine Linux)
   - Runtime stage: nginx (Alpine Linux)
-- **Volumes**: Only database persists
+- **Optimized**: Multi-stage builds, no dev dependencies
+- **Port 3000**: Backend API
+- **Port 80**: Frontend (nginx)
 
 ### Network
 
