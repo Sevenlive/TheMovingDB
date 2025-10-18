@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 3000
 
 # Start the server
-CMD ["bun", "run", "index.ts"]
+CMD ["bun", "index.ts"]

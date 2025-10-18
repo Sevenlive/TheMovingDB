@@ -13,4 +13,4 @@ RUN bun install
 EXPOSE 3000
 
 # Start the server with --watch for hot reload
-CMD ["bun", "run", "--watch", "index.ts"]
+CMD ["bun", "--watch", "index.ts"]
