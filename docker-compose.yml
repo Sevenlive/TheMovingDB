@@ -1,0 +1,40 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: themovingdb-backend-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount source code for hot reload
+      - ./backend:/app
+      # Exclude node_modules
+      - /app/node_modules
+      # Persist database
+      - backend-data:/app/data
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: themovingdb-frontend-dev
+    ports:
+      - "5173:5173"
+    volumes:
+      # Mount source code for hot reload
+      - ./frontend:/app
+      # Exclude node_modules
+      - /app/node_modules
+    environment:
+      - VITE_API_BASE_URL=http://localhost:3000/api
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  backend-data:

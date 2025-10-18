@@ -22,7 +22,67 @@ A full-stack moving inventory management application built with Bun.js (backend)
 - [Bun](https://bun.sh) - Fast JavaScript runtime (for backend)
 - [Node.js](https://nodejs.org) - For frontend development
 
+**OR**
+
+- [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) - For containerized deployment
+
 ## Installation
+
+### Docker Deployment (Recommended)
+
+For the easiest setup with Docker, see the [Docker Deployment Guide](DOCKER.md) for detailed instructions.
+
+**Quick start:**
+
+```bash
+# Development mode with hot reload
+docker compose up
+
+# Production mode
+docker compose -f docker-compose.prod.yml up -d
+```
+
+Or use the setup script:
+
+```bash
+./docker-setup.sh
+```
+
+#### Development Mode (with hot reload)
+
+Run the application in development mode with auto-reload:
+
+```bash
+docker-compose up
+```
+
+This will start:
+- Backend on `http://localhost:3000` with hot reload (file changes auto-restart)
+- Frontend on `http://localhost:5173` with Vite HMR (hot module replacement)
+
+The source code is mounted as volumes, so any changes you make will automatically reload the services.
+
+#### Production Mode
+
+Run the application in production mode:
+
+```bash
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+This will start:
+- Backend on `http://localhost:3000` (optimized Bun runtime)
+- Frontend on `http://localhost:80` (served by Bun.serve())
+
+To stop the containers:
+```bash
+docker-compose -f docker-compose.prod.yml down
+```
+
+To rebuild after code changes:
+```bash
+docker-compose -f docker-compose.prod.yml up -d --build
+```
 
 ### Quick Start (Recommended)
 
@@ -139,6 +199,15 @@ The backend uses Bun's built-in web server and SQLite database. The server autom
 ### Frontend
 The frontend is built with React and TypeScript using Vite for fast development. It uses a component-based architecture with dedicated components for forms, lists, and the dashboard.
 
+### Environment Variables
+
+#### Frontend
+- `VITE_API_BASE_URL` - Backend API URL (default: `http://localhost:3000/api`)
+
+#### Backend
+- `PORT` - Server port (default: `3000`)
+- `NODE_ENV` - Environment mode (`development` or `production`)
+
 ## Project Structure
 
 ```
@@ -147,6 +216,8 @@ TheMovingDB/
 │   ├── index.ts          # Main server file
 │   ├── database.ts       # Database setup and schema
 │   ├── types.ts          # TypeScript type definitions
+│   ├── Dockerfile        # Production Docker image
+│   ├── Dockerfile.dev    # Development Docker image with hot reload
 │   └── package.json
 ├── frontend/
 │   ├── src/
@@ -154,7 +225,14 @@ TheMovingDB/
 │   │   ├── App.tsx       # Main app component
 │   │   ├── api.ts        # API service layer
 │   │   └── types.ts      # TypeScript types
+│   ├── server.ts         # Production Bun server
+│   ├── Dockerfile        # Production Docker image
+│   ├── Dockerfile.dev    # Development Docker image with HMR
 │   └── package.json
+├── docker-compose.yml         # Development compose file
+├── docker-compose.prod.yml    # Production compose file
+├── docker-setup.sh            # Interactive setup script
+├── DOCKER.md                  # Docker deployment guide
 └── README.md
 ```
 
