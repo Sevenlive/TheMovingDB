@@ -1,13 +1,13 @@
 # Frontend Dockerfile for production
-FROM node:20-alpine AS builder
+FROM oven/bun:1.1.38-alpine AS builder
 
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json bun.lockb* ./
 
 # Install dependencies
-RUN npm ci
+RUN bun install
 
 # Copy source code
 COPY . .
@@ -17,19 +17,19 @@ ARG VITE_API_BASE_URL=http://localhost:3000/api
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
 # Build the app
-RUN npm run build
+RUN bun run build
 
-# Production stage - serve with nginx
-FROM nginx:alpine
+# Production stage - serve with Bun
+FROM oven/bun:1.1.38-alpine
 
-# Copy built assets from builder
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy built assets and server from builder
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/server.ts ./server.ts
 
 # Expose port
 EXPOSE 80
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start Bun server
+CMD ["bun", "server.ts"]

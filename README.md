@@ -72,7 +72,7 @@ docker-compose -f docker-compose.prod.yml up -d
 
 This will start:
 - Backend on `http://localhost:3000` (optimized Bun runtime)
-- Frontend on `http://localhost:80` (served by nginx)
+- Frontend on `http://localhost:80` (served by Bun.serve())
 
 To stop the containers:
 ```bash
@@ -225,7 +225,7 @@ TheMovingDB/
 │   │   ├── App.tsx       # Main app component
 │   │   ├── api.ts        # API service layer
 │   │   └── types.ts      # TypeScript types
-│   ├── nginx.conf        # Nginx configuration for production
+│   ├── server.ts         # Production Bun server
 │   ├── Dockerfile        # Production Docker image
 │   ├── Dockerfile.dev    # Development Docker image with HMR
 │   └── package.json

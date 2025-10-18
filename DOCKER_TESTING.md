@@ -100,20 +100,19 @@ curl http://localhost:3000/api/dashboard
 
 Open your browser to http://localhost
 
-You should see the same interface, but served by nginx on port 80.
+You should see the same interface, but served by Bun.serve() on port 80.
 
 ### 6. Test Production Features
 
-**Gzip compression:**
+**Static file serving:**
 ```bash
-curl -H "Accept-Encoding: gzip" -I http://localhost
-# Look for "Content-Encoding: gzip" header
-```
+# Test that static assets are served correctly
+curl -I http://localhost
+# Should return 200 OK with HTML content
 
-**Cache headers:**
-```bash
+# Test asset files
 curl -I http://localhost/assets/index.js
-# Look for "Cache-Control" header
+# Should return 200 OK
 ```
 
 ### 7. View Logs

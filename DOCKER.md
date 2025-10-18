@@ -58,7 +58,7 @@ docker compose -f docker-compose.prod.yml up -d
 
 **Features:**
 - Optimized builds with multi-stage Dockerfiles
-- Frontend served by nginx with gzip compression
+- Frontend served by Bun.serve() with static file serving
 - Smaller image sizes
 - Health checks enabled
 - Database persists in a Docker volume
@@ -169,9 +169,9 @@ services:
       - "8000:5173"  # Changed from 5173:5173
 ```
 
-### Custom nginx Configuration
+### Custom Frontend Server Configuration
 
-Edit `frontend/nginx.conf` to customize the nginx server configuration for production.
+Edit `frontend/server.ts` to customize the Bun.serve() configuration for production, such as adding custom headers or middleware.
 
 ### Using External Database
 
@@ -243,9 +243,9 @@ docker compose exec backend bun run -e "import db from './database.ts'; console.
 │  │   Backend Container  │      │  Frontend Container  │    │
 │  │  themovingdb-backend │      │ themovingdb-frontend │    │
 │  │                      │      │                      │    │
-│  │  Bun 1.1.38 Alpine   │      │  Node 20 Alpine      │    │
+│  │  Bun 1.1.38 Alpine   │      │  Bun 1.1.38 Alpine   │    │
 │  │  Port: 3000          │◄─────┤  Port: 5173          │    │
-│  │  CMD: bun --watch    │      │  CMD: vite --host    │    │
+│  │  CMD: bun --watch    │      │  CMD: bun run dev    │    │
 │  │                      │      │                      │    │
 │  │  Volumes:            │      │  Volumes:            │    │
 │  │  - ./backend → /app  │      │  - ./frontend → /app │    │
@@ -266,7 +266,7 @@ docker compose exec backend bun run -e "import db from './database.ts'; console.
 
 **Features:**
 - **Backend**: Bun 1.1.38 (Alpine Linux) with watch mode
-- **Frontend**: Node 20 (Alpine Linux) with Vite dev server
+- **Frontend**: Bun 1.1.38 (Alpine Linux) with Vite dev server
 - **Hot Reload**: Source code mounted as volumes
 - **Port 3000**: Backend API
 - **Port 5173**: Frontend with HMR
@@ -306,11 +306,11 @@ docker compose exec backend bun run -e "import db from './database.ts'; console.
 **Features:**
 - **Backend**: Bun 1.1.38 (Alpine Linux) optimized build
 - **Frontend**: 
-  - Build stage: Node 20 (Alpine Linux)
-  - Runtime stage: nginx (Alpine Linux)
+  - Build stage: Bun (Alpine Linux)
+  - Runtime stage: Bun.serve() (Alpine Linux)
 - **Optimized**: Multi-stage builds, no dev dependencies
 - **Port 3000**: Backend API
-- **Port 80**: Frontend (nginx)
+- **Port 80**: Frontend (Bun.serve())
 
 ### Network
 
@@ -328,8 +328,7 @@ Services communicate through Docker's internal network. Frontend connects to bac
 
 - Multi-stage builds for smaller images
 - No dev dependencies
-- Gzip compression enabled
-- Static assets cached by nginx
+- Static assets served by Bun.serve()
 - Health checks for reliability
 
 ## Security Notes
